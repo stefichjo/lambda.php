@@ -1,9 +1,9 @@
 <?php
 
-// area :: Shape -> Float
+// area :: ShapeAdt -> Float
 // area (Rectangle width height) = width * height
 // area (Circle radius) = radius
-class Shape {
+class ShapeAdt {
     public function area() {
         switch (get_class($this)) {
             case 'Rectangle':   return $this->width * $this->height;
@@ -12,16 +12,16 @@ class Shape {
     }
 }
 
-// data Shape = Rectangle { width :: Float, height :: Float } | ...
-class Rectangle extends Shape {
+// data ShapeAdt = Rectangle { width :: Float, height :: Float } | ...
+class Rectangle extends ShapeAdt {
     function __construct($width, $height) {
         $this->width = $width;
         $this->height = $height;
     }
 }
 
-// data Shape = ... | Circle { radius :: Float }
-class Circle extends Shape {
+// data ShapeAdt = ... | Circle { radius :: Float }
+class Circle extends ShapeAdt {
     function __construct($radius) {
         $this->radius = $radius;
     }
@@ -29,10 +29,9 @@ class Circle extends Shape {
 
 // rect = Rectangle 13 23
 $rect = new Rectangle(13, 23);
-// area rect
-var_dump($rect->area());
 
 // circ = Circle 42
 $circ = new Circle(42);
-// area circ
-var_dump($circ->area());
+
+//var_dump($rect->area()); // -> 299
+//var_dump($circ->area()); // -> 414.523...

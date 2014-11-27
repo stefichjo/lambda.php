@@ -1,10 +1,10 @@
 <?php
 
-interface Shape {
+interface ShapeTypeClass {
     public function area();
 }
 
-class Rectangle implements Shape {
+class RectangleType implements ShapeTypeClass {
     function __construct($width, $height) {
         $this->width = $width;
         $this->height = $height;
@@ -15,7 +15,7 @@ class Rectangle implements Shape {
     }
 }
 
-class Circle implements Shape {
+class CircleType implements ShapeTypeClass {
     function __construct($radius) {
         $this->radius = $radius;
     }
@@ -25,5 +25,5 @@ class Circle implements Shape {
     }
 }
 
-var_dump((new Rectangle(13, 23))->area());
-var_dump((new Circle(42))->area());
+//var_dump((new RectangleType(13, 23))->area()); // -> 299
+//var_dump((new CircleType(42))->area()); // -> 414.523...

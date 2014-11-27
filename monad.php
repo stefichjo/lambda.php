@@ -1,15 +1,20 @@
 <?php
 
 interface Monad {
-    public function inject(Closure $f);
+	// (this<a>, (a -> this<b>)) -> this<b>
+	public function flatMap(Closure $f);
 }
-
 interface Show {
-    public function show();
+	// this -> String
+	public function show();
+}
+interface Read {
+	// String -> this
+	public function read();
 }
 
 class Maybe implements Monad {
-    public function inject(Closure $f) {
+    public function flatMap(Closure $f) {
         switch (get_class($this)) {
             case 'Nothing':     return $this;
             case 'Just':        return $f($this->m);
@@ -19,6 +24,7 @@ class Maybe implements Monad {
 class Nothing extends Maybe {}
 class Just extends Maybe { function __construct($m) { $this->m = $m; } }
 
+// a -> Maybe<a>
 $f = function($a) {
     if ($a <= 0) {
         return new Nothing();
@@ -27,27 +33,37 @@ $f = function($a) {
     }
 };
 
-$m = (new Just(5))->inject($f)->inject($f)->inject($f)->inject($f);
-//var_dump($m);
+$m = (new Just(5))->flatMap($f)->flatMap($f)->flatMap($f)->flatMap($f);
 
 class Listing implements Monad, Show {
-    public function inject(Closure $f) {
+	// ([a], (a -> [b])) -> [b]
+    public function flatMap(Closure $f) {
         switch (get_class($this)) {
             case 'Nil':     return $this;
-            case 'Cons':    return concat(map($f, $this));
+            case 'Cons':    return flatten(map($f, $this));
         }
     }
 
+	// [a] -> array
     public function show() {
         switch (get_class($this)) {
-            case 'Nil':     return '[]';
-            case 'Cons':    return $this->head . ' ' . $this->tail->show();
+            case 'Nil':     return array();
+            case 'Cons':    return array_merge(array($this->head), $this->tail->show());
+        }
+    }
+
+	// array -> [a]
+    public static function read(array $array) {
+        switch ($array) {
+            case []:    return new Nil;
+            default:    return new Cons(array_shift($array), Listing::read($array));
         }
     }
 }
 class Nil extends Listing {}
 class Cons extends Listing { function __construct($head, Listing $tail) { $this->head = $head; $this->tail = $tail; } }
 
+// ((a -> b), [a]) -> [b]
 function map($f, Listing $listing) {
     switch (get_class($listing)) {
         case 'Nil':     return $listing;
@@ -55,40 +71,31 @@ function map($f, Listing $listing) {
     }
 }
 
-function concat(Listing $listings) {
+// [[a]] -> [a]
+function flatten(Listing $listings) {
     switch (get_class($listings)) {
         case 'Nil':     return $listings;
-        case 'Cons':    return conc($listings->head, concat($listings->tail));
+        case 'Cons':    return concat($listings->head, flatten($listings->tail));
     }
 }
 
-function conc(Listing $xs, Listing $ys) {
+// ([a], [a]) -> [a]
+function concat(Listing $xs, Listing $ys) {
     switch (get_class($xs)) {
         case 'Nil':     return $ys;
-        case 'Cons':    return new Cons($xs->head, conc($xs->tail, $ys));
+        case 'Cons':    return new Cons($xs->head, concat($xs->tail, $ys));
     }
 }
 
+$listing123 = Listing::read([1, 2, 3]);
+$listing456 = Listing::read([4, 5, 6]);
+$listing126 = concat($listing123, $listing456);
 
-$listing123 = new Cons(1, new Cons(2, new Cons(3, new Nil)));
-//echo $listing123->show();
-
-$listing456 = new Cons(4, new Cons(5, new Cons(6, new Nil)));
-//echo $listing456->show();
-
-$listing126 = conc($listing123, $listing456);
-//echo $listing126->show();
-
+// a -> [a]
 $mirror = function($x) {
-    return new Cons($x, new Cons(-$x, new Nil));
+    return Listing::read([$x, -$x]);
 };
 
-//echo $listing126->inject($mirror)->show();
+$listing = $listing126->flatMap($mirror);
 
-$inc = function($n) {
-    return $n + 1;
-};
-$listing = new Cons(1, new Cons(2, new Cons(3, new Nil)));
-//var_dump($listing);
-//var_dump(map($inc, $listing));
 
