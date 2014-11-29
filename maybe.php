@@ -1,15 +1,15 @@
 <?php
 
-class Maybe implements Monad {
-    public function flatMap(Closure $f) {
+class Maybe implements IoC {
+    public function inject(Closure $f) {
         switch (get_class($this)) {
             case 'Nothing':     return $this;
-            case 'Just':        return $f($this->m);
+            case 'Just':        return $f($this->value);
         }
     }
 }
 class Nothing extends Maybe {}
-class Just extends Maybe { function __construct($m) { $this->m = $m; } }
+class Just extends Maybe { function __construct($value) { $this->value = $value; } }
 
 // a -> Maybe<a>
 $f = function($a) {
@@ -20,6 +20,6 @@ $f = function($a) {
     }
 };
 
-$m = (new Just(5))->flatMap($f)->flatMap($f)->flatMap($f)->flatMap($f);
+$m = (new Just(5))->inject($f)->inject($f)->inject($f)->inject($f);
 
 

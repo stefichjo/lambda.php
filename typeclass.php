@@ -28,9 +28,9 @@ class CircleType implements ShapeTypeClass {
 //var_dump((new RectangleType(13, 23))->area()); // -> 299
 //var_dump((new CircleType(42))->area()); // -> 414.523...
 
-interface Monad {
+interface IoC {
 	// (this<a>, (a -> this<b>)) -> this<b>
-	public function flatMap(Closure $f);
+	public function inject(Closure $f);
 }
 interface Show {
 	// this -> String

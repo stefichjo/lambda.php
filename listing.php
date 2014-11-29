@@ -1,8 +1,8 @@
 <?php
 
-class Listing implements Monad, Show {
+class Listing implements IoC, Show {
 	// ([a], (a -> [b])) -> [b]
-    public function flatMap(Closure $f) {
+    public function inject(Closure $f) {
         switch (get_class($this)) {
             case 'Nil':     return $this;
             case 'Cons':    return flatten(map($f, $this));
@@ -61,6 +61,6 @@ $mirror = function($x) {
     return Listing::read([$x, -$x]);
 };
 
-$listing = $listing126->flatMap($mirror);
+$listing = $listing126->inject($mirror);
 
 
