@@ -8,6 +8,24 @@ Installation
 
 Include `main.php`.
 
+Non-Features
+============
+
+These features are already features of PHP.
+
+Lambda Expressions
+------------------
+
+Lambda Expressions, *Closures* or *Anonymous Functions* are available since PHP 5.3.
+
+```php
+$inc = function($a) { return $a + 1; };
+echo $inc(42); // -> 43
+
+$sqr = function($a) { return $a * $a; };
+echo $sqr(3); // -> 9
+```
+
 Features
 ========
 
@@ -15,9 +33,6 @@ Function Composition
 --------------------
 
 ```php
-$inc = function($a) { return $a + 1; };
-$sqr = function($a) { return $a * $a; };
-
 $sqrAndInc = compose($inc, $sqr);
 echo $sqrAndInc(3); // -> 10
 ```
