@@ -17,3 +17,8 @@ $foo = autoCurry(
 $foo1 = $foo(1);
 $foo12 = $foo1(2);
 var_dump($foo12(3));
+
+$answer = autoCurry(
+	function() { return 42; }
+);
+var_dump($answer());
