@@ -9,6 +9,6 @@ class Container implements IoC {
 }
 
 $inc = function($a) { return $a + 1; }
-$incContain = function ($a) use ($inc) {
-	return new Container($inc($a));
-};
+
+$incContain = function($a) use ($inc) { return new Container($inc($a)); };
+

@@ -86,22 +86,29 @@ echo (new Container(42))->inject($inc); // -> 43
 
 This pattern is called *Inversion of Control* (*IoC*).
 
-```php
-class Container implements IoC {
-	function __construct($value) { $this->value = $value; }
-
-	function inject(Closure $f) {
-		return $f($this->value);
-	}
-}
-```
-
-In order to make Inversion of Control composable, the injector function needs to accept value container constructors. This pattern is called *Monad*.
+In order to make Inversion of Control *composable*, each injection must also be an instantiation of a new value container. This self-similar computational pattern is called *Dependency Injection* or *Monad*.
 
 ```php
-$containerInc = function($a) use ($inc) { return new Container($inc($a)); };
+$inc = function($a) { return $a + 1; }
 
-var_dump((new Container(42))->inject($containerInc)->inject($containerInc)); // -> Container(44)
+$incContain = function($a) use ($inc) { return new Container($inc($a)); };
+
+var_dump((new Container(42))->inject($incContain)->inject($incContain)); // -> new Container(44)
+```
+
+Algebraic Data Type
+-------------------
+
+An algebraic data type consists of *variants*. The OOP term is *Inheritance*.
+
+```php
+class Shape {}
+class Rectangle extends Shape {}
+class Circle extends Shape {}
 ```
 
 
+Monadic Algebraic Data Type
+---------------------------
+
+When a monadic type is also an algrebraic data type
