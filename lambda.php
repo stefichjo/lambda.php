@@ -1,11 +1,11 @@
 <?php
+ini_set('xdebug.max_nesting_level', 1234);
+
 require('fp.php');
 require('adt.php');
 require('typeclass.php');
 require('container.php');
 require('maybe.php');
-require('listing.php');
+require('stack.php');
 
-class Shape {}
-class Rectangle extends Shape {}
-class Circle extends Shape {}
+
