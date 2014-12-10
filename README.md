@@ -163,10 +163,10 @@ var_dump($decMaybe(42)); // => new Just(41)
 var_dump($decMaybe(0)); // => new Nothing
 ```
 
-Implementing the `IoC` interface, i.e. the `inject` function, the `Maybe` monad becomes composeable.
+Implementing the `DI` interface, i.e. the `inject` function, the `Maybe` monad becomes composeable.
 
 ```php
-class Maybe implements IoC {
+class Maybe implements DI {
     public function inject(Closure $f) {
         switch (get_class($this)) {
             case 'Nothing':     return $this;
@@ -203,7 +203,7 @@ Stack
 The `Stack` monad, as a matter of fact, is quite similar to the `Maybe` monad, but its "`Just`" part is recursive, which causes the elements of the stack to be linked.
 
 ```php
-class Stack implements IoC { /* ... */ }
+class Stack implements DI { /* ... */ }
 class Nil extends Stack {}
 class Cons extends Stack { function __construct($head, Stack $tail) { $this->head = $head; $this->tail = $tail; } }
 ```
