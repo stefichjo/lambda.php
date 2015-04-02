@@ -1,9 +1,9 @@
 <?php
 
-class Container implements DI {
+class Container implements Fluent {
 	function __construct($value) { $this->value = $value; }
 
-	function inject(Closure $f) {
+	function bind(Closure $f) {
 		return $f($this->value);
 	}
 }

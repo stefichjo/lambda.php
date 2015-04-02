@@ -7,7 +7,7 @@ abstract class Shape {
     public function area() {
         switch (get_class($this)) {
             case 'Rectangle':   return $this->width * $this->height;
-            case 'Circle':      return $this->radius * pow(pi(), 2);
+            case 'Circle':      return pow($this->radius, 2) * pi());
         }
     }
 }

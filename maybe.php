@@ -1,7 +1,7 @@
 <?php
 
-class Maybe implements DI {
-    public function inject(Closure $f) {
+class Maybe implements Fluent {
+    public function bind(Closure $f) {
         switch (get_class($this)) {
             case 'Nothing':     return $this;
             case 'Just':        return $f($this->value);

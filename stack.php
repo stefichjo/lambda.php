@@ -1,8 +1,8 @@
 <?php
 
-class Stack implements DI {
+class Stack implements Fluent {
 	// ([a], (a -> [b])) -> [b]
-    public function inject(Closure $f) {
+    public function bind(Closure $f) {
         switch (get_class($this)) {
             case 'Nil':     return $this;
             case 'Cons':    return flatten(map($f, $this));
@@ -86,6 +86,6 @@ $mirror = function($x) {
     return Stack::fromArray([$x, -$x]);
 };
 
-$stack = $stack126->inject($mirror);
+$stack = $stack126->bind($mirror);
 
 

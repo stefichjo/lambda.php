@@ -1,7 +1,7 @@
 <?php
 
-interface DI {
-	// $di->inject($make) == $di
-	public function inject(Closure $f);
+interface Fluent {
+	// $object->inject($make) == $object
+	public function bind(Closure $f);
 }
 
